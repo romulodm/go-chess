@@ -113,13 +113,9 @@ func (client *Client) handleNewMessage(jsonMessage []byte) {
 
 	message.Sender = client
 
-	switch message.Action {
-	case SendMessageAction:
-		roomID := message.Target.GetId()
-		if room := findRoomById(roomID); room != nil {
-			room.broadcast <- &message
-		}
-	}
+	room := client.room
+
+	room.broadcast <- &message
 
 }
 
