@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -158,6 +159,7 @@ func CreateRoom(w http.ResponseWriter, r *http.Request) {
 	room := NewRoom(id)
 	rooms[id] = room
 
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -173,7 +175,19 @@ func CreateRoom(w http.ResponseWriter, r *http.Request) {
 
 	go room.RunRoom()
 
-	client.send <- []byte("Sala criada com sucesso!")
+	message := Message{
+		Action:  "CONNECTED_ON_SERVER",
+		Message: id,
+		Sender:  client,
+	}
+
+	jsonMessage, err := json.Marshal(message)
+	if err != nil {
+		fmt.Println("Error to convert to JSON:", err)
+		return
+	}
+
+	client.send <- jsonMessage
 }
 
 func JoinRoom(w http.ResponseWriter, r *http.Request) {
@@ -187,6 +201,8 @@ func JoinRoom(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !room.hasTwoClients() {
+
+		upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			log.Println(err)
@@ -200,7 +216,19 @@ func JoinRoom(w http.ResponseWriter, r *http.Request) {
 
 		room.registerClientInRoom(client)
 
-		client.send <- []byte("Entrada na sala realizada com sucesso!")
+		message := Message{
+			Action:  "ENTERED_ON_SERVER",
+			Message: id,
+			Sender:  client,
+		}
+
+		jsonMessage, err := json.Marshal(message)
+		if err != nil {
+			fmt.Println("Error to convert to JSON:", err)
+			return
+		}
+
+		client.send <- jsonMessage
 
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
