@@ -28,3 +28,18 @@
     font-weight: bold;
     color: #586fff;
 }
+
+.scroll-stylized {
+    overflow: hidden;
+    overflow-y: scroll;
+  }
+  
+  .scroll-stylized::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 5px; 
+  } 
+  
+  .scroll-stylized::-webkit-scrollbar-thumb{
+    background-color: #3a17fd;
+    border-radius: 5px;
+  }
