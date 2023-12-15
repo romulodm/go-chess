@@ -18,7 +18,6 @@ var (
 type Message struct {
 	Action  string  `json:"action"`
 	Message string  `json:"message"`
-	Target  *Room   `json:"target"`
 	Sender  *Client `json:"sender"`
 }
 
