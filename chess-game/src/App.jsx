@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import ErrorBoundary from './ErrorBoundary';
 import Home from './pages/Home';
+import Game from './pages/Game';
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/"  element={<Home/>}/>
-          
+          <Route path="/game"  element={<Game/>}/>  
+
           <Route path="*" element={<Navigate to="/"/>} />
 
         </Routes>
