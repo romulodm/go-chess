@@ -1,15 +1,10 @@
-import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import Lobby from '../components/Lobby';
 
 export default function Home() {
-    const [openLobby, setOpenLobby] = useState(false);
-
-    const [webSocket, setWebSocket] = useState(false);
-
     return (
         <div className="bg-white h-screen flex items-center justify-center">
             
@@ -42,19 +37,18 @@ export default function Home() {
                     Learn More
                 </a>
 
-                <button  
-                    className="inline-flex hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
-                    onClick={() => setOpenLobby(true)}
-                >
-                    Play game
-                    <KeyboardTabIcon style={{marginLeft: '8px'}}/>
-                </button>
+                <NavLink to="/game">
+                    <button  
+                        className="inline-flex hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+                        
+                    >
+                        Play game
+                        <KeyboardTabIcon style={{marginLeft: '8px'}}/>
+                    </button>
+                </NavLink>
 
                 </div>
             </div>
-
-            {openLobby && <Lobby setOpenLobby={setOpenLobby} webSocket={webSocket} setWebSocket={setWebSocket}/>}
-
         </div>
     )
 };
