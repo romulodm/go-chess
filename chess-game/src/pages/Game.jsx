@@ -10,6 +10,7 @@ import Chat from '../components/Chat';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Lobby from '../components/Lobby';
 import Waiting from '../components/Waiting';
+import WithMoveValidation from '../components/BoardTest';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -91,7 +92,7 @@ export default function Game() {
     // Conexão com o WebSocket:
     const [openChat, setOpenChat] = useState(false);
     const [usersMessages, setUsersMessages] = useState([]);
-    const [newMessagesReceived, setNewMessagesReceived] = useState(0);
+    const [newMessagesReceived, setNewMessagesReceived] = useState(200);
     //
 
     return (
@@ -117,7 +118,7 @@ export default function Game() {
                 
                     <div className="flex">
 
-                        <Board />
+                        <WithMoveValidation />
            
                         <div className="flex items-center">
                             {openChat === true ? (
