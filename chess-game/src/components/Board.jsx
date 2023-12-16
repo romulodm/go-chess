@@ -6,7 +6,7 @@ import { Chess } from "chess.js";
 export default function Board() {
     return (
 
-        <Chessboard/>
+        <Chessboard boardWidth={900}/>
             
     );
 }

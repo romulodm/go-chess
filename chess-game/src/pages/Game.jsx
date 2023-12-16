@@ -95,7 +95,7 @@ export default function Game() {
     //
 
     return (
-    <div className="bg-gray-100 h-screen flex items-center justify-center">
+    <div className="flex justify-center p-3.5">
 
         {webSocket === false ? (
             <Lobby 
@@ -114,8 +114,8 @@ export default function Game() {
                     setUserName={setUserName}
                 />
             ) : (
-                <div className="flex w-full justify-center">
-                    <div className="flex w-full justify-center">
+                
+                    <div className="flex">
 
                         <Board />
            
@@ -131,13 +131,13 @@ export default function Game() {
                                     setNewMessagesReceived={setNewMessagesReceived}
                                 />
                             ) : (
-                                <div className="flex flex-col items-center justify-center w-20 h-full bg-gray-400 text-gray-800 p-10">
+                                <div className="flex justify-center items-center w-20 h-full mx-2 bg-yellow-700 bg-opacity-60 text-gray-800 rounded-md">
                                     
                                     <button
                                         className="p-4 text-gray-500 rounded-lg bg-gray-200 transition duration-300 hover:bg-gray-300 hover:text-black"
                                         onClick={() => setOpenChat(true)}
                                     >
-                                        <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="secondary" style={{ fontSize: '12em' }}>
+                                        <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="secondary">
                                             <ChatOutlinedIcon />
                                         </Badge>
                                     </button>
@@ -145,7 +145,7 @@ export default function Game() {
                             )}
                         </div>
                     </div>
-                </div>
+                
             )
         )}
 
