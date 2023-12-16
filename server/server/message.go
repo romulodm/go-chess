@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"log"
+	"time"
 )
 
 var (
@@ -16,9 +17,10 @@ var (
 )
 
 type Message struct {
-	Action  string  `json:"action"`
-	Message string  `json:"message"`
-	Sender  *Client `json:"sender"`
+	Action    string    `json:"action"`
+	Message   string    `json:"message"`
+	Sender    *Client   `json:"sender"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 func (message *Message) encode() []byte {

@@ -112,6 +112,7 @@ func (client *Client) handleNewMessage(jsonMessage []byte) {
 	}
 
 	message.Sender = client
+	message.Timestamp = time.Now()
 
 	room := client.room
 
