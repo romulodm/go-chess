@@ -32,9 +32,9 @@ export default function Home() {
                 A simple project made to use new technologies, have fun playing chess with friends!
                 </p>
                 <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-                <a href="https://github.com/romulodm/go-chess-ws" target='_blank' className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100">
+                <a href="https://github.com/romulodm/go-chess-ws/blob/main/README.md" target='_blank' className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100">
                     <DescriptionOutlinedIcon style={{marginRight: '8px'}}/>
-                    Learn More
+                    Learn more
                 </a>
 
                 <NavLink to="/game">
