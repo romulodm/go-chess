@@ -31,7 +31,7 @@ We have implemented rooms that can have a maximum of two users connected, that i
 
  <br>
 
-<details>
+<details open>
  <summary>Room</summary>
  <br>
   
