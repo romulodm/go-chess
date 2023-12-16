@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 import generateRandomGameCode from "../scripts/generateGameCode";
-import io from 'socket.io-client';
 
-import MuiAlert from '@mui/material/Alert';
-import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutlineOutlined';
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-function SlideTransition(props) {
-  return <Slide {...props} direction="up" />;
-}
 
 const style = {
   position: 'absolute',
@@ -48,14 +37,24 @@ export default function Lobby(props) {
         var codeToSend = generateRandomGameCode();
 
         const socket = new WebSocket(`${SOCKET_BASE_URL}/create-room?id=${codeToSend}`)
-
+        
         socket.addEventListener("message", (event) => {
             const messageFromServer = JSON.parse(event.data);
-            console.log(messageFromServer)
-            props.setCodeToShow(messageFromServer.message);
+
+            if (messageFromServer.action == "CONNECTED_ON_SERVER") {
+                props.setUserName(messageFromServer.sender.Name)
+                props.setCodeToShow(messageFromServer.message);
+            }
         });
 
-        props.setWebSocket(socket);
+        socket.onopen = function (event) {
+            props.setWebSocket(socket);
+        };
+
+        socket.onerror = function (error) {
+            props.handleAlertMessage("error", "An error occurred while creating the room.")
+        };
+
     }
     //
 
@@ -65,27 +64,35 @@ export default function Lobby(props) {
 
         const regexGameCode = /^[A-Z0-9]+$/;
 
+        console.log(gameCode)
         if (gameCode.length < 7 || !regexGameCode.test(gameCode)) {
             props.handleAlertMessage("error", "Enter a valid code, please.");
+            return
         }
 
         const socket = new WebSocket(`${SOCKET_BASE_URL}/join-room?id=${gameCode}`)
-
+        
         socket.onopen = function (event) {
-            console.log('Conexão estabelecida com sucesso!');
+            props.setWebSocket(socket)
         };
 
         socket.onerror = function (error) {
-            props.handleAlertMessage("error", "")
+            props.handleAlertMessage("error", "An error occurred when entering the room.")
         };
 
         socket.addEventListener("message", (event) => {
             const messageFromServer = JSON.parse(event.data);
-            console.log(messageFromServer)
-            props.setCodeToShow(messageFromServer.message);
-        });
 
-        //props.setWebSocket(socket);
+            if (messageFromServer.action === "ENTERED_ON_SERVER") {
+                props.setCodeToShow(messageFromServer.message);
+                props.setUserName(messageFromServer.sender.Name)
+                socket.send(JSON.stringify({
+                    "action": "START_GAME",
+                    "message": "Client joined"
+                }));
+                props.setStartGame(true);
+            }
+        });
     }
     //
 
