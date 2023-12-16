@@ -91,7 +91,7 @@ export default function Game() {
     // Conexão com o WebSocket:
     const [openChat, setOpenChat] = useState(false);
     const [usersMessages, setUsersMessages] = useState([]);
-    const [newMessagesReceived, setNewMessagesReceived] = useState(200);
+    const [newMessagesReceived, setNewMessagesReceived] = useState(0);
     //
 
     return (
