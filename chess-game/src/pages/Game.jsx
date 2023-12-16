@@ -119,6 +119,8 @@ export default function Game() {
                     <div className="flex">
 
                         <WithMoveValidation />
+                        {//AQUI DEVEREMOS PASSAR AS PROPS DO WEBSOCKET PARA PODER FAZER A TRANSFERENCIA DOS DADOS.
+                        }
            
                         <div className="flex items-center">
                             {openChat === true ? (

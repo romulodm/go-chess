@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Chess } from "chess.js"; // import Chess from  "chess.js"(default) if recieving an error about new Chess() not being a constructor
+import { Chess } from "chess.js"; // Importe Chess de "chess.js" (padrão) se receber um erro sobre new Chess() não ser um construtor
 
 import Chessboard from "chessboardjsx";
 
-class HumanVsHuman extends Component {
+class HumanoVsHumano extends Component {
   static propTypes = { children: PropTypes.func };
 
   state = {
-    fen: "start",
-    // square styles for active drop square
+    fen: "início",
+    // estilos do quadrado para o quadrado de destino ativo
     dropSquareStyle: {},
-    // custom square styles
+    // estilos personalizados para quadrados
     squareStyles: {},
-    // square with the currently clicked piece
+    // quadrado com a peça clicada atualmente
     pieceSquare: "",
-    // currently clicked square
+    // quadrado clicado atualmente
     square: "",
-    // array of past game moves
+    // array de movimentos passados do jogo
     history: []
   };
 
@@ -25,14 +25,14 @@ class HumanVsHuman extends Component {
     this.game = new Chess();
   }
 
-  // keep clicked square style and remove hint squares
+  // mantenha o estilo do quadrado clicado e remova os quadrados de dica
   removeHighlightSquare = () => {
     this.setState(({ pieceSquare, history }) => ({
       squareStyles: squareStyling({ pieceSquare, history })
     }));
   };
 
-  // show possible moves
+  // mostrar movimentos possíveis
   highlightSquare = (sourceSquare, squaresToHighlight) => {
     const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
       (a, c) => {
@@ -60,14 +60,14 @@ class HumanVsHuman extends Component {
   };
 
   onDrop = ({ sourceSquare, targetSquare }) => {
-    // see if the move is legal
+    // verifique se o movimento é legal
     let move = this.game.move({
       from: sourceSquare,
       to: targetSquare,
-      promotion: "q" // always promote to a queen for example simplicity
+      promotion: "q" // sempre promova para uma rainha por simplicidade
     });
 
-    // illegal move
+    // movimento ilegal
     if (move === null) return;
     this.setState(({ history, pieceSquare }) => ({
       fen: this.game.fen(),
@@ -77,13 +77,13 @@ class HumanVsHuman extends Component {
   };
 
   onMouseOverSquare = square => {
-    // get list of possible moves for this square
+    // obtenha a lista de movimentos possíveis para este quadrado
     let moves = this.game.moves({
       square: square,
       verbose: true
     });
 
-    // exit if there are no moves available for this square
+    // saia se não houver movimentos disponíveis para este quadrado
     if (moves.length === 0) return;
 
     let squaresToHighlight = [];
@@ -96,7 +96,7 @@ class HumanVsHuman extends Component {
 
   onMouseOutSquare = square => this.removeHighlightSquare(square);
 
-  // central squares get diff dropSquareStyles
+  // quadrados centrais têm estilos de queda diferentes
   onDragOverSquare = square => {
     this.setState({
       dropSquareStyle:
@@ -115,10 +115,10 @@ class HumanVsHuman extends Component {
     let move = this.game.move({
       from: this.state.pieceSquare,
       to: square,
-      promotion: "q" // always promote to a queen for example simplicity
+      promotion: "q" // sempre promova para uma rainha por simplicidade
     });
 
-    // illegal move
+    // movimento ilegal
     if (move === null) return;
 
     this.setState({
@@ -150,10 +150,10 @@ class HumanVsHuman extends Component {
   }
 }
 
-export default function WithMoveValidation() {
+export default function ComValidacaoDeMovimento() {
   return (
     <div>
-      <HumanVsHuman>
+      <HumanoVsHumano>
         {({
           position,
           onDrop,
@@ -166,9 +166,9 @@ export default function WithMoveValidation() {
           onSquareRightClick
         }) => (
           <Chessboard
-            id="humanVsHuman"
-            calcWidth={({ screenWidth, screenHeight }) => 
-                Math.min(screenWidth, screenHeight) * 0.95
+            id="humanoVsHumano"
+            calcWidth={({ screenWidth, screenHeight }) =>
+              Math.min(screenWidth, screenHeight) * 0.95
             }
             position={position}
             onDrop={onDrop}
@@ -185,7 +185,7 @@ export default function WithMoveValidation() {
             onSquareRightClick={onSquareRightClick}
           />
         )}
-      </HumanVsHuman>
+      </HumanoVsHumano>
     </div>
   );
 }
