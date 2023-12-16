@@ -1,17 +1,17 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
 
 export default function Board() {
-
-    const chess = new Chess()
-    console.log(chess.ascii())
+    const [game, setGame] = useState(new Chess());
+    const [fen, setFen] = useState('start');
+    console.log(game.ascii())
     
-    console.log(chess)
+    console.log(game)
     return (
 
-        <Chessboard width={900} />
+        <Chessboard width={900} calcWidth={({ screenWidth, screenHeight }) => Math.min(screenWidth, screenHeight) * 0.95} />
             
     );
 }
