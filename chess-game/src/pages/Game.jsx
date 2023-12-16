@@ -96,7 +96,7 @@ export default function Game() {
     //
 
     return (
-    <div className="flex justify-center p-3.5">
+    <div className="flex h-screen justify-center items-center">
 
         {webSocket === false ? (
             <Lobby 
