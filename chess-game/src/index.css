@@ -3,43 +3,47 @@
 @tailwind utilities;
 
 .game-code-lobby {
-    display: block;
-    border: none;
-    padding: 0;
-    width: 10.5ch;
-    background: repeating-linear-gradient(
-            90deg,
-            dimgrey 0,
-            dimgrey 1ch,
-            transparent 0,
-            transparent 1.5ch
-        )
-        0 100%/ 10ch 2px no-repeat;
-    font: 2ch "Space Mono", "Roboto Mono", monospace;
-    letter-spacing: 0.5ch;
-    color: #9ca3af;
-    position: relative;
-    left: 3px;
-    text-decoration: none;
+  display: block;
+  border: none;
+  padding: 0;
+  width: 10.5ch;
+  background: repeating-linear-gradient(
+          90deg,
+          dimgrey 0,
+          dimgrey 1ch,
+          transparent 0,
+          transparent 1.5ch
+      )
+      0 100%/ 10ch 2px no-repeat;
+  font: 2ch "Space Mono", "Roboto Mono", monospace;
+  letter-spacing: 0.5ch;
+  color: #9ca3af;
+  position: relative;
+  left: 3px;
+  text-decoration: none;
 }
 
 .game-code-lobby:focus {
-    outline: none;
-    font-weight: bold;
-    color: #586fff;
+  outline: none;
+  font-weight: bold;
+  color: #586fff;
 }
 
 .scroll-stylized {
-    overflow: hidden;
-    overflow-y: scroll;
-  }
+  overflow: hidden;
+  overflow-y: scroll;
+}
   
-  .scroll-stylized::-webkit-scrollbar {
-    width: 3px;
-    border-radius: 5px; 
-  } 
-  
-  .scroll-stylized::-webkit-scrollbar-thumb{
-    background-color: #3a17fd;
-    border-radius: 5px;
-  }
+.scroll-stylized::-webkit-scrollbar {
+  width: 3px;
+  border-radius: 5px; 
+} 
+
+.scroll-stylized::-webkit-scrollbar-thumb{
+  background-color: #757575;
+  border-radius: 5px;
+}
+
+.letter-spacing-code {
+  letter-spacing: .4em;
+}

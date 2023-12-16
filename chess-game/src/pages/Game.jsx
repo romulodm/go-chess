@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Badge } from "@mui/material";
+
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -7,6 +9,7 @@ import Board from '../components/Board';
 import Chat from '../components/Chat';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Lobby from '../components/Lobby';
+import Waiting from '../components/Waiting';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -35,13 +38,60 @@ export default function Game() {
     const [webSocket, setWebSocket] = useState(false);
     //
 
+    useEffect(() => {
+        if (webSocket !== false) {
+
+            webSocket.onerror = function (error) {
+                props.handleAlertMessage("error", "An error occurred when entering the room.")
+            };
+    
+            webSocket.addEventListener("message", (event) => {
+                const messageFromServer = JSON.parse(event.data);
+                
+                if (messageFromServer.action == "START_GAME") {
+                    setStartGame(true);
+                }
+
+                if (messageFromServer.action == "CHAT_MESSAGE") {
+                    var message = {
+                        "sender": messageFromServer.sender.Name,
+                        "message": messageFromServer.message,
+                        "time": messageFromServer.timestamp
+                    };
+        
+                    if (usersMessages.length > 0) {
+                        var lastMessage = usersMessages[usersMessages.length -1];
+        
+                        if ((message.message == lastMessage.message) && (message.sender == lastMessage.sender) && (message.time == lastMessage.time)) {
+                            return false
+                        }
+                    }
+                    
+                    const newMessages = [...usersMessages, message];
+                    setUsersMessages(newMessages);
+                    setNewMessagesReceived(newMessagesReceived + 1);
+                }
+
+            });
+        }
+      }, [webSocket]);
+
+    // Condição para iniciar um novo jogo:
+    const [startGame, setStartGame] = useState(false);
+    //
+
     // ID da sala para exibir na tela (recebido pelo servidor):
     const [codeToShow, setCodeToShow] = useState("");
+    //
+
+    // Username (se criar a sala é Player 1, caso contrário é Player 2):
+    const [userName, setUserName] = useState("");
     //
 
     // Conexão com o WebSocket:
     const [openChat, setOpenChat] = useState(false);
     const [usersMessages, setUsersMessages] = useState([]);
+    const [newMessagesReceived, setNewMessagesReceived] = useState(200);
     //
 
     return (
@@ -52,37 +102,51 @@ export default function Game() {
                 setWebSocket={setWebSocket}
                 handleAlertMessage={handleAlertMessage}
                 setCodeToShow={setCodeToShow}
+                setStartGame={setStartGame}
+                setUserName={setUserName}
             />
         ) : (
-            <div className="flex w-full justify-center">
-                
+            (webSocket !== false && startGame === false) ? (
+                <Waiting
+                    codeToShow={codeToShow}
+                    webSocket={webSocket}
+                    setStartGame={setStartGame}
+                    setUserName={setUserName}
+                />
+            ) : (
+                <div className="flex w-full justify-center">
+                    <div className="flex w-full justify-center">
 
-
-                <Board />
-
-                
-                <div className="flex items-center">
-                    {openChat === true ? (
-                        <Chat
-                            setOpenChat={setOpenChat}
-                            openChat={openChat}
-                            usersMessages={usersMessages}
-                            setUsersMessages={setUsersMessages}
-                        />
-                    ) : (
-                        <div className="flex flex-col items-center justify-center w-20 h-full bg-gray-400 text-gray-800 p-10">
-                            
-                            <button
-                                className="p-4 text-gray-500 rounded-lg bg-gray-200 transition duration-300 hover:bg-gray-300 hover:text-black"
-                                onClick={() => setOpenChat(true)}
-                            >
-                                <ChatOutlinedIcon />
-
-                            </button>
+                        <Board />
+           
+                        <div className="flex items-center">
+                            {openChat === true ? (
+                                <Chat
+                                    webSocket={webSocket}
+                                    setOpenChat={setOpenChat}
+                                    openChat={openChat}
+                                    usersMessages={usersMessages}
+                                    setUsersMessages={setUsersMessages}
+                                    userName={userName}
+                                    setNewMessagesReceived={setNewMessagesReceived}
+                                />
+                            ) : (
+                                <div className="flex flex-col items-center justify-center w-20 h-full bg-gray-400 text-gray-800 p-10">
+                                    
+                                    <button
+                                        className="p-4 text-gray-500 rounded-lg bg-gray-200 transition duration-300 hover:bg-gray-300 hover:text-black"
+                                        onClick={() => setOpenChat(true)}
+                                    >
+                                        <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="secondary" style={{ fontSize: '12em' }}>
+                                            <ChatOutlinedIcon />
+                                        </Badge>
+                                    </button>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
-            </div>
+            )
         )}
 
 
