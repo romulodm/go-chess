@@ -36,9 +36,11 @@ export default function Game() {
     };
     //
 
+    const [windowWidth, setWindowWidth] = useState();
+
     function verificarTamanhoDaTela() {
-        var larguraDaTela = window.innerWidth;
-        console.log(larguraDaTela)
+        return setWindowWidth(window.innerWidth)
+        //console.log(larguraDaTela)
 
         // Define a largura mínima para exibir a div (por exemplo, 600 pixels)
         var larguraMinima = 900;
@@ -53,6 +55,7 @@ export default function Game() {
         }
     }
 
+    
     // Chama a função quando a página é carregada e sempre que a janela é redimensionada
     window.addEventListener("load", verificarTamanhoDaTela);
     window.addEventListener("resize", verificarTamanhoDaTela);
@@ -75,6 +78,7 @@ export default function Game() {
 
     // Conexão com o WebSocket:
     const [openChat, setOpenChat] = useState(false);
+    const [openChatOpened, setOpenChatOpened] = useState(true);
     const [usersMessages, setUsersMessages] = useState([]);
     const [newMessagesReceived, setNewMessagesReceived] = useState(0);
     //
@@ -154,29 +158,31 @@ export default function Game() {
                     />
                     
                     <div className="flex items-center">
-                        <div id='chatMobDiv' className="hidden justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
+                        {windowWidth >= 900 && openChatOpened === true ? (
+                            <div id='chatDiv' className='flex justify-center items-right w-full h-full mx-4 rounded-md' >
+                                <ChatOpened
+                                webSocket={webSocket}
+                                setOpenChatOpened={setOpenChat}
+                                openChat={openChat}
+                                usersMessages={usersMessages}
+                                setUsersMessages={setUsersMessages}
+                                userName={userName}
+                                setNewMessagesReceived={setNewMessagesReceived}
+                                />
+                            </div>
+                        ) : (
+                            <div id='chatMobDiv' className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
 
-                            <button
-                                className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300 "
-                                onClick={() => setOpenChat(true)}
-                            >
-                                <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="error">
-                                    <ChatOutlinedIcon />
-                                </Badge>
-                            </button>
-                        </div>
-                        <div id='chatDiv' className='flex justify-center items-right w-full h-full mx-4 rounded-md' >
-                            <ChatOpened
-                            webSocket={webSocket}
-                            setOpenChat={setOpenChat}
-                            openChat={openChat}
-                            usersMessages={usersMessages}
-                            setUsersMessages={setUsersMessages}
-                            userName={userName}
-                            setNewMessagesReceived={setNewMessagesReceived}
-                            />
-                        </div>
-
+                                <button
+                                    className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300 "
+                                    onClick={() => setOpenChat(true)}
+                                >
+                                    <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="error">
+                                        <ChatOutlinedIcon />
+                                    </Badge>
+                                </button>
+                            </div>
+                        )}
                         {openChat === true && 
                             <Chat
                                 webSocket={webSocket}
