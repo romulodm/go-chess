@@ -126,6 +126,14 @@ func (client *Client) GetName() string {
 
 func (client *Client) disconnect() {
 	client.room.unregister <- client
+
+	message := Message{
+		Action:  "USER_LEFT_ROOM",
+		Message: "A client left the room.",
+		Sender:  client,
+	}
+
+	client.room.broadcast <- &message
 	close(client.send)
 	client.conn.Close()
 }
