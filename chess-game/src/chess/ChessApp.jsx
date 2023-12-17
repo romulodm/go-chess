@@ -29,12 +29,16 @@ export default class ChessApp extends Component {
   }
 
   isMyTurn() {
-    console.log(game.turn(), this.myColor)
     if ((game.turn() === "w" && this.myColor === "white") || (game.turn() === "b" && this.myColor === "black")) {
       return true
     }
     return false
   };
+
+  resetGame() {
+    game.reset();
+    this.setState({ fen: game.fen() })
+  }
 
   componentDidMount() {
     this.setState({ fen: game.fen() });
@@ -46,6 +50,20 @@ export default class ChessApp extends Component {
         game.load(messageFromServer.message);
 
         this.setState({ fen: game.fen() });
+
+        this.checkGameStatus();
+      }
+
+      if (messageFromServer.action === "USER_LEFT_ROOM") {
+        this.resetGame();
+      }
+
+      if (messageFromServer.action === "GAME_REMATCH") {
+        game.load(messageFromServer.message);
+
+        this.setState({ fen: game.fen() });
+
+        this.checkGameStatus()
       }
     };
     
@@ -76,8 +94,44 @@ export default class ChessApp extends Component {
     }
   };
 
-  prepareMove() {
-    console.log("Oi")
+  checkGameStatus() {
+    if (game.isCheckmate()) {
+      var messageToSend = game.turn() === "w" ? "Black pieces win by checkmate!" : "White pieces win by checkmate!";
+
+      this.webSocket.send(JSON.stringify({
+        "action": "GAME_CHECKMATE",
+        "message" :messageToSend
+      }));
+
+      this.resetGame();
+      
+    } else if (game.isDraw()) {
+
+      this.webSocket.send(JSON.stringify({
+        "action": "GAME_DRAW",
+        "message": "The match ended in a draw (50 move rule or insufficient material)."
+      }))
+
+      this.resetGame();
+
+    } else if (game.isThreefoldRepetition()) {
+      this.webSocket.send(JSON.stringify({
+        "action": "GAME_DRAW",
+        "message": "The match ended in a draw due to the repeat movement rule."
+      }));
+
+      this.resetGame();
+
+    } else if (game.isStalemate()) {
+
+      this.webSocket.send(JSON.stringify({
+        "action": "GAME_DRAW",
+        "message": "The game ended in a draw by the stalemate rule (no moves for the king)."
+      }));
+      
+      this.resetGame();
+    }
+    return
   }
 
   render() {
