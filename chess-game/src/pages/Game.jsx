@@ -11,6 +11,7 @@ import Lobby from '../components/Lobby';
 import Waiting from '../components/Waiting';
 
 import BoardOneVsOne from '../components/BoardOneVsOne.';
+import ChatOpened from '../components/ChatOpened';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -34,6 +35,27 @@ export default function Game() {
         setTimeout(() => { setShowAlertMessage(false) }, 7000); // Fechar a mensagem;
     };
     //
+
+    function verificarTamanhoDaTela() {
+        var larguraDaTela = window.innerWidth;
+        console.log(larguraDaTela)
+
+        // Define a largura mínima para exibir a div (por exemplo, 600 pixels)
+        var larguraMinima = 900;
+
+        // Se a largura da tela for maior ou igual à largura mínima, exibe a div, caso contrário, oculta-a
+        if (larguraDaTela >= larguraMinima) {
+            document.getElementById("chatDiv").style.display = "flex";
+            document.getElementById("chatMobDiv").style.display = "none";
+        } else {
+            document.getElementById("chatDiv").style.display = "none";
+            document.getElementById("chatMobDiv").style.display = "flex";
+        }
+    }
+
+    // Chama a função quando a página é carregada e sempre que a janela é redimensionada
+    window.addEventListener("load", verificarTamanhoDaTela);
+    window.addEventListener("resize", verificarTamanhoDaTela);
 
     // Conexão com o WebSocket:
     const [webSocket, setWebSocket] = useState(false);
@@ -132,7 +154,7 @@ export default function Game() {
                     />
                     
                     <div className="flex items-center">
-                        <div className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
+                        <div id='chatMobDiv' className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
 
                             <button
                                 className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300 "
@@ -142,6 +164,17 @@ export default function Game() {
                                     <ChatOutlinedIcon />
                                 </Badge>
                             </button>
+                        </div>
+                        <div id='chatDiv' className='flex justify-center items-right w-full h-full mx-4 rounded-md' >
+                            <ChatOpened
+                            webSocket={webSocket}
+                            setOpenChat={setOpenChat}
+                            openChat={openChat}
+                            usersMessages={usersMessages}
+                            setUsersMessages={setUsersMessages}
+                            userName={userName}
+                            setNewMessagesReceived={setNewMessagesReceived}
+                            />
                         </div>
 
                         {openChat === true && 
