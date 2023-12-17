@@ -27,8 +27,8 @@ export default function BoardOneVsOne(props) {
               onDrop={onDrop}
               boardStyle={boardStyle}
               lightSquareStyle={{ backgroundColor: "AliceBlue" }}
-              darkSquareStyle={{ backgroundColor: "#C3C3C3" }}
-
+              darkSquareStyle={{ backgroundColor: "#b3b3b3" }}
+          
               orientation={boardPerspective()}
             />
           )}

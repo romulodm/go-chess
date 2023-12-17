@@ -32,22 +32,23 @@ export default function Waiting(props) {
             <div className="grid gap-y-4 rounded-xl">
                 
                 <div className="flex flex-col items-center bg-white text-gray-700 py-6 text-center">   
-
-                    <p className="text-gray-400 mt-2 mb-2">
+                    
+                    
+                    <p className="text-gray-400 mb-2">
                     Code to enter the room:
                     </p>
                     
-                    <div className="bg-purple-300 p-4 rounded-lg">
-                        <p className="text-purple-700 font-bold letter-spacing-code">
+                    <div className="bg-blue-200 p-4 rounded-lg mb-5">
+                        <p className="text-blue-700 font-bold letter-spacing-code">
                             {props.codeToShow}
                         </p>
                     </div>
-
-                    <label className="text-gray-400 mt-10 mb-5">
-                        Waiting for players...
-                    </label>
-                    <CircularProgress color="secondary"/>
-                                    
+                    
+                    <CircularProgress color="primary"/>
+                    
+                    <p className="text-gray-400 mt-4 mb-4">
+                    Waiting for players...
+                    </p>        
                 </div>
 
 

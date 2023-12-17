@@ -23,7 +23,8 @@ var SOCKET_BASE_URL = "ws://localhost:8000"
 
 export default function Lobby(props) {
     // Exibir loading (o círculo que fica rodando):
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingNewGame, setIsLoadingNewGame] = useState(false);
+    const [isLoadingJoinGame, setIsLoadingJoinGame] = useState(false);
     //
 
     // Código que será inserido pelo usuário:
@@ -34,6 +35,8 @@ export default function Lobby(props) {
     const handleNewGame = async (e) => {
         e.preventDefault();
 
+        setIsLoadingNewGame(true);
+
         var codeToSend = generateRandomGameCode();
 
         const socket = new WebSocket(`${SOCKET_BASE_URL}/create-room?id=${codeToSend}`)
@@ -42,16 +45,20 @@ export default function Lobby(props) {
             const messageFromServer = JSON.parse(event.data);
 
             if (messageFromServer.action == "CONNECTED_ON_SERVER") {
+                setIsLoadingNewGame(false);
+                
                 props.setUserName(messageFromServer.sender.Name)
                 props.setCodeToShow(messageFromServer.message);
             }
         });
 
         socket.onopen = function (event) {
+            setIsLoadingNewGame(false);
             props.setWebSocket(socket);
         };
 
         socket.onerror = function (error) {
+            setIsLoadingNewGame(false);
             props.handleAlertMessage("error", "An error occurred while creating the room.")
         };
 
@@ -62,9 +69,10 @@ export default function Lobby(props) {
     const handleJoinGame = (e) => {
         e.preventDefault();
 
+        setIsLoadingJoinGame(true);
+
         const regexGameCode = /^[A-Z0-9]+$/;
 
-        console.log(gameCode)
         if (gameCode.length < 7 || !regexGameCode.test(gameCode)) {
             props.handleAlertMessage("error", "Enter a valid code, please.");
             return
@@ -73,10 +81,12 @@ export default function Lobby(props) {
         const socket = new WebSocket(`${SOCKET_BASE_URL}/join-room?id=${gameCode}`)
         
         socket.onopen = function (event) {
+            setIsLoadingJoinGame(false);
             props.setWebSocket(socket)
         };
 
         socket.onerror = function (error) {
+            setIsLoadingJoinGame(false);
             props.handleAlertMessage("error", "An error occurred when entering the room.")
         };
 
@@ -84,6 +94,8 @@ export default function Lobby(props) {
             const messageFromServer = JSON.parse(event.data);
 
             if (messageFromServer.action === "ENTERED_ON_SERVER") {
+                setIsLoadingJoinGame(false);
+
                 props.setCodeToShow(messageFromServer.message);
                 props.setUserName(messageFromServer.sender.Name)
                 socket.send(JSON.stringify({
@@ -114,8 +126,21 @@ export default function Lobby(props) {
                                     onClick={handleNewGame}
                                     className="inline-flex w-40 hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
                                 >
-                                    <PlayCircleOutlineOutlinedIcon style={{marginRight: "5px"}}/>
-                                    New game
+
+                                    {(isLoadingNewGame == false) ? (
+                                        <>
+                                        <PlayCircleOutlineOutlinedIcon style={{marginRight: "5px"}}/>
+                                        New game
+                                        </>
+                                    ) : (
+
+                                        <>
+                                        <CircularProgress size={20} style={{marginRight: "10px", fontSize: "2px"}} color="secondary" />
+                                        New game
+                                        </>
+                                    )}
+
+                                    
                                 </button>
 
                                 <p className="text-gray-400 mt-10">-OR-</p>
@@ -137,8 +162,19 @@ export default function Lobby(props) {
                                         onClick={handleJoinGame}
                                         className="inline-flex ml-3 hover:bg-blue-600 bg-blue-700 justify-center items-center py-3 px-4 text-base font-medium text-center text-white rounded-lg bg-blue-700 focus:ring-4"
                                     >   
-                                        <LoginOutlinedIcon style={{marginRight: "7px"}}/>
-                                        Join
+
+                                        {(isLoadingJoinGame == false) ? (
+                                            <>
+                                            <LoginOutlinedIcon style={{marginRight: "7px"}}/>
+                                            Join
+                                            </>
+                                        ) : (
+
+                                            <>
+                                            <CircularProgress size={20} style={{marginRight: "10px", fontSize: "2px"}} color="secondary" />
+                                            Join
+                                            </>
+                                        )}
                                     </button>
                                 </div>
 
@@ -152,14 +188,6 @@ export default function Lobby(props) {
 
 
         </div>
-
-        <React.Fragment>
-            {isLoading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                <CircularProgress color="primary" />
-            </Box>
-            )}
-        </React.Fragment>
 
     </Box>
   )
