@@ -43,14 +43,6 @@ export default function Chat(props) {
                 "time": messageFromServer.timestamp
             };
 
-            if (props.usersMessages.length > 0) {
-                var lastMessage = props.usersMessages[props.usersMessages.length -1];
-
-                if ((message.message == lastMessage.message) && (message.sender == lastMessage.sender) && (message.time == lastMessage.time)) {
-                    return false
-                }
-            }
-
             const newMessages = [...props.usersMessages, message];
             props.setUsersMessages(newMessages);
 
@@ -120,11 +112,12 @@ export default function Chat(props) {
                              <div className="flex items-center justify-center h-8 w-10 rounded-full bg-gray-200">
                                  <AccountCircleOutlinedIcon style={{color: "#474747"}}/>
                              </div>
-                         
+
                              <div>
                                  <div className="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
                                      <p className="text-sm">{item.message.toString()}</p>
                                  </div>
+                                 <span className="text-xs text-gray-500 leading-none">{moment(item.time).fromNow()}</span>
                              </div>
                          </div>
                             
@@ -136,7 +129,7 @@ export default function Chat(props) {
                                     <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
                                         <p className="text-sm">{item.message}</p>
                                     </div>
-                                    <span class="text-xs text-gray-500 leading-none">{moment(item.time).fromNow()}</span>
+                                    <span className="text-xs text-gray-500 leading-none">{moment(item.time).fromNow()}</span>
                                 </div>
 
                                 <div className="flex items-center justify-center h-8 w-12 rounded-full bg-gray-200">
