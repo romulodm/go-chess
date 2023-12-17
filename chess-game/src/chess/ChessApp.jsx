@@ -4,6 +4,9 @@ import { Chess } from "chess.js";
 
 const game = new Chess();
 
+import playMoveSound from "../scripts/moveSound";
+import playCaptureSound from "../scripts/capturedSound";
+
 export default class ChessApp extends Component {
   static propTypes = { children: PropTypes.func };
 
@@ -73,7 +76,7 @@ export default class ChessApp extends Component {
     
     if (this.isMyTurn()) {
       try {
-        const move = game.move({
+        var move = game.move({
           from: sourceSquare,
           to: targetSquare,
           promotion: "q"
@@ -86,6 +89,13 @@ export default class ChessApp extends Component {
       }
 
       this.setState({ fen: game.fen() });
+
+      if (move.captured) {
+        playCaptureSound();
+      } else {
+        playMoveSound();
+      }
+      
 
       this.webSocket.send(JSON.stringify({
         "action": "GAME_MOVE",
