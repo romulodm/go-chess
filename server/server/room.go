@@ -209,6 +209,12 @@ func JoinRoom(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		for client := range room.clients {
+			if client.Name == "Player 2" {
+				client.Name = "Player 1"
+			}
+		}
+
 		client := NewClient(conn, "Player 2", room)
 
 		go client.writePump()
