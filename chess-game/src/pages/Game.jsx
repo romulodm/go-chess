@@ -154,7 +154,7 @@ export default function Game() {
                     />
                     
                     <div className="flex items-center">
-                        <div id='chatMobDiv' className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
+                        <div id='chatMobDiv' className="hidden justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
 
                             <button
                                 className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300 "
