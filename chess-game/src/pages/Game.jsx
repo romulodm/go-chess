@@ -5,12 +5,12 @@ import { Badge } from "@mui/material";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Slide from '@mui/material/Slide';
-import Board from '../components/Board';
 import Chat from '../components/Chat';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Lobby from '../components/Lobby';
 import Waiting from '../components/Waiting';
-import WithMoveValidation from '../components/BoardTest';
+
+import BoardOneVsOne from '../components/BoardOneVsOne.';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -39,44 +39,6 @@ export default function Game() {
     const [webSocket, setWebSocket] = useState(false);
     //
 
-    useEffect(() => {
-        if (webSocket !== false) {
-
-            webSocket.onerror = function (error) {
-                props.handleAlertMessage("error", "An error occurred when entering the room.")
-            };
-    
-            webSocket.addEventListener("message", (event) => {
-                const messageFromServer = JSON.parse(event.data);
-                
-                if (messageFromServer.action == "START_GAME") {
-                    setStartGame(true);
-                }
-
-                if (messageFromServer.action == "CHAT_MESSAGE") {
-                    var message = {
-                        "sender": messageFromServer.sender.Name,
-                        "message": messageFromServer.message,
-                        "time": messageFromServer.timestamp
-                    };
-        
-                    if (usersMessages.length > 0) {
-                        var lastMessage = usersMessages[usersMessages.length -1];
-        
-                        if ((message.message == lastMessage.message) && (message.sender == lastMessage.sender) && (message.time == lastMessage.time)) {
-                            return false
-                        }
-                    }
-                    
-                    const newMessages = [...usersMessages, message];
-                    setUsersMessages(newMessages);
-                    setNewMessagesReceived(newMessagesReceived + 1);
-                }
-
-            });
-        }
-      }, [webSocket]);
-
     // Condição para iniciar um novo jogo:
     const [startGame, setStartGame] = useState(false);
     //
@@ -92,8 +54,54 @@ export default function Game() {
     // Conexão com o WebSocket:
     const [openChat, setOpenChat] = useState(false);
     const [usersMessages, setUsersMessages] = useState([]);
-    const [newMessagesReceived, setNewMessagesReceived] = useState(200);
+    const [newMessagesReceived, setNewMessagesReceived] = useState(0);
     //
+
+    const handleWebSocketMessage = (event) => {
+        const messageFromServer = JSON.parse(event.data);
+    
+        if (messageFromServer.action === "START_GAME") {
+          setStartGame(true);
+        }
+    
+        if (messageFromServer.action === "CHAT_MESSAGE") {
+          const message = {
+            "sender": messageFromServer.sender.Name,
+            "message": messageFromServer.message,
+            "time": messageFromServer.timestamp
+          };
+    
+          // Adicione a nova mensagem ao estado local
+          const newLocalMessages = [...usersMessages, message];
+          setUsersMessages(newLocalMessages);
+
+          if (newMessagesReceived , 1) {
+            setNewMessagesReceived(1)
+          }
+          
+          // Atualize o estado global se o componente do chat estiver aberto
+          if (openChat) {
+            setNewMessagesReceived(newMessagesReceived + 1);
+          }
+        }
+    };
+
+    useEffect(() => {
+        if (webSocket !== false) {
+
+            webSocket.onerror = function (error) {
+                handleAlertMessage("error", "An error occurred with socket.")
+            };
+    
+            webSocket.addEventListener("message", handleWebSocketMessage);
+        }
+        
+        return () => {
+            if (webSocket !== false) {
+              webSocket.removeEventListener("message", handleWebSocketMessage);
+            }
+        };
+    }, [webSocket, openChat, usersMessages, newMessagesReceived]);
 
     return (
     <div className="flex h-screen justify-center items-center">
@@ -116,38 +124,39 @@ export default function Game() {
                 />
             ) : (
                 
-                    <div className="flex">
+                <div className="flex flex-col md:flex-row">
 
-                        <WithMoveValidation />
-                        {//AQUI DEVEREMOS PASSAR AS PROPS DO WEBSOCKET PARA PODER FAZER A TRANSFERENCIA DOS DADOS.
-                        }
-           
-                        <div className="flex items-center">
-                            {openChat === true ? (
-                                <Chat
-                                    webSocket={webSocket}
-                                    setOpenChat={setOpenChat}
-                                    openChat={openChat}
-                                    usersMessages={usersMessages}
-                                    setUsersMessages={setUsersMessages}
-                                    userName={userName}
-                                    setNewMessagesReceived={setNewMessagesReceived}
-                                />
-                            ) : (
-                                <div className="flex justify-center items-center w-20 h-full mx-2 bg-yellow-700 bg-opacity-60 text-gray-800 rounded-md">
-                                    
-                                    <button
-                                        className="p-4 text-gray-500 rounded-lg bg-gray-200 transition duration-300 hover:bg-gray-300 hover:text-black"
-                                        onClick={() => setOpenChat(true)}
-                                    >
-                                        <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="secondary">
-                                            <ChatOutlinedIcon />
-                                        </Badge>
-                                    </button>
-                                </div>
-                            )}
+                    <BoardOneVsOne
+                        userName={userName}
+                        webSocket={webSocket}
+                    />
+                    
+                    <div className="flex items-center">
+                        <div className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
+
+                            <button
+                                className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300 "
+                                onClick={() => setOpenChat(true)}
+                            >
+                                <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="error">
+                                    <ChatOutlinedIcon />
+                                </Badge>
+                            </button>
                         </div>
+
+                        {openChat === true && 
+                            <Chat
+                                webSocket={webSocket}
+                                setOpenChat={setOpenChat}
+                                openChat={openChat}
+                                usersMessages={usersMessages}
+                                setUsersMessages={setUsersMessages}
+                                userName={userName}
+                                setNewMessagesReceived={setNewMessagesReceived}
+                            />
+                        }
                     </div>
+                </div>
                 
             )
         )}
