@@ -15,7 +15,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 390,
+  width: 380,
   height: '80%',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 };
@@ -92,12 +92,12 @@ export default function Chat(props) {
         <div className="flex flex-col flex-grow w-full h-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
             <div className="relative bg-gray-200 p-4 ">
                 <div className="flex justify-between items-center ">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 className="text-lg p-2 font-semibold text-gray-900 dark:text-white">
                         Chat
                     </h3>
                     <button
                         type="button"
-                        className="text-gray-400 bg-transparent hover:bg-gray-300 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover-bg-gray-600 dark:hover-text-white"
+                        className="text-gray-400 bg-transparent hover:bg-gray-300 hover:text-gray-900 rounded-lg text-sm p-2 ml-auto inline-flex items-center dark:hover-bg-gray-600 dark:hover-text-white"
                         onClick={() => props.setOpenChat(false)}
                     >
                         <CloseIcon/>
@@ -145,30 +145,32 @@ export default function Chat(props) {
                 ))}    
       
             </div>
-                             
-            <form className="flex bg-gray-200 p-4">
-                
-                <div className="flex flex-col w-full mr-4 rounded px-3 text-sm w-full">
-                <input 
-                    className="rounded h-10 px-3 text-sm focus:outline-none focus:ring focus:ring-purple-400" 
-                    type="text"
-                    placeholder="Type your message…"
-                    onChange={(e) => setMessageToSend(e.target.value)}
-                    value={messageToSend} 
-                />
-                    <span className={`text-sm mt-1 ${messageToSend.length > maxLetterLimit ? 'text-red-500' : 'text-gray-400'}`}>{messageToSend.length}/{maxLetterLimit} letters</span>
-                </div>
-            
-                <button
-                    disabled={messageToSend.length > maxLetterLimit}
-                    onClick={handleSendMessage}
-                    className={`text-white h-10 bg-gray-500 inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-300 ${messageToSend.length <= maxLetterLimit ? 'hover:bg-purple-700' : ''}`}
+
+            <div className="bg-gray-200">         
+                <form className="flex mr-2 ml-2 p-4">
                     
-                    type="submit"
-                >
-                <span className="font-bold">Send</span>
-                </button>
-            </form>
+                    <div className="flex flex-col w-full mr-4 rounded text-sm w-full">
+                    <input 
+                        className="rounded h-10 px-3 text-sm focus:outline-none focus:ring focus:ring-purple-400" 
+                        type="text"
+                        placeholder="Type your message…"
+                        onChange={(e) => setMessageToSend(e.target.value)}
+                        value={messageToSend} 
+                    />
+                        <span className={`text-sm mt-1 ${messageToSend.length > maxLetterLimit ? 'text-red-500' : 'text-gray-400'}`}>{messageToSend.length}/{maxLetterLimit} letters</span>
+                    </div>
+                
+                    <button
+                        disabled={messageToSend.length > maxLetterLimit}
+                        onClick={handleSendMessage}
+                        className={`text-white px-3 h-10 bg-gray-500 inline-flex items-center justify-center rounded-lg py-3 transition duration-300 ${messageToSend.length <= maxLetterLimit ? 'hover:bg-purple-700' : ''}`}
+                        
+                        type="submit"
+                    >
+                    <span className="font-bold">Send</span>
+                    </button>
+                </form>
+            </div> 
         </div>
         </Box>    
     </Modal>

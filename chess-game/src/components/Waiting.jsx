@@ -9,12 +9,10 @@ const style = {
   left: '50%',
   border: 1,
   borderColor: "#EFEFEF",
-  borderRadius: "5px",
+  borderRadius: "8px",
   transform: 'translate(-50%, -50%)',
   width: 350,
 };
-
-var SOCKET_BASE_URL = "ws://localhost:8000"
 
 export default function Waiting(props) {
     
@@ -29,10 +27,9 @@ export default function Waiting(props) {
 
     <Box sx={style}>
 
-            <div className="grid gap-y-4 rounded-xl">
-                
+        <div className="bg-white rounded-xl shadow-lg">
+            <div className="p-4 sm:p-4">
                 <div className="flex flex-col items-center bg-white text-gray-700 py-6 text-center">   
-                    
                     
                     <p className="text-gray-400 mb-2">
                     Code to enter the room:
@@ -50,9 +47,8 @@ export default function Waiting(props) {
                     Waiting for players...
                     </p>        
                 </div>
-
-
             </div>
+        </div>
     </Box>
   )
 }

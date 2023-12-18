@@ -31,16 +31,15 @@ export default function Home() {
                 <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48">
                 A simple project made to use new technologies, have fun playing chess with friends!
                 </p>
-                <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-                <a href="https://github.com/romulodm/go-chess-ws/blob/main/README.md" target='_blank' className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100">
-                    <DescriptionOutlinedIcon style={{marginRight: '8px'}}/>
-                    Learn more
-                </a>
+                <div className="flex flex-col w-full mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+                    <a href="https://github.com/romulodm/go-chess-ws/blob/main/README.md" target='_blank' className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100">
+                        <DescriptionOutlinedIcon style={{marginRight: '8px'}}/>
+                        Learn more
+                    </a>
 
                 <NavLink to="/game">
                     <button  
-                        className="inline-flex hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
-                        
+                        className="inline-flex w-full hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
                     >
                         Play game
                         <KeyboardTabIcon style={{marginLeft: '8px'}}/>
