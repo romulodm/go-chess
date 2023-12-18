@@ -15,7 +15,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 480,
+  width: 420,
   height: '80%',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 };
@@ -49,9 +49,11 @@ export default function Chat(props) {
             
         }
     })
-        
 
+    // Mensagem que vai ser digitada pelo usuário:    
     const [messageToSend, setMessageToSend] = useState("");
+    const maxLetterLimit = 30;
+    //
 
     // Quando o botão de enviar mensagem é clicado:
     const handleSendMessage = (e) => {
@@ -143,25 +145,30 @@ export default function Chat(props) {
                 ))}    
       
             </div>
+                             
+            <form className="flex bg-gray-200 p-4">
+                
+                <div className="flex flex-col w-full mr-4 rounded px-3 text-sm w-full">
+                <input 
+                    className="rounded h-10 px-3 text-sm focus:outline-none focus:ring focus:ring-purple-400" 
+                    type="text"
+                    placeholder="Type your message…"
+                    onChange={(e) => setMessageToSend(e.target.value)}
+                    value={messageToSend} 
+                />
+                    <span className={`text-sm mt-1 ${messageToSend.length > maxLetterLimit ? 'text-red-500' : 'text-gray-400'}`}>{messageToSend.length}/{maxLetterLimit} letters</span>
+                </div>
             
-  
-          <form className="flex bg-gray-200 p-4">
-            <input 
-                className="flex items-center w-full mr-4 rounded px-3 text-sm focus:outline-none focus:ring focus:ring-purple-400" 
-                type="text" 
-                placeholder="Type your message…"
-                onChange={(e) => setMessageToSend(e.target.value)}
-                value={messageToSend} 
-            />
-          
-            <button
-                onClick={handleSendMessage}
-                className="text-white bg-gray-500 hover:bg-purple-700 inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-300"
-                type="submit"
-            >
-               <span className="font-bold">Send</span>
-            </button>
-          </form>
+                <button
+                    disabled={messageToSend.length > maxLetterLimit}
+                    onClick={handleSendMessage}
+                    className={`text-white h-10 bg-gray-500 inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-300 ${messageToSend.length <= maxLetterLimit ? 'hover:bg-purple-700' : ''}`}
+                    
+                    type="submit"
+                >
+                <span className="font-bold">Send</span>
+                </button>
+            </form>
         </div>
         </Box>    
     </Modal>
