@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 import moment from "moment";
 import 'moment/dist/locale/pt-br'
@@ -9,12 +9,7 @@ moment.locale('pt-br')
 
 
 export default function ChatOpened(props) {
-    // Para fechar o modal:
-    const [openAlert, setOpen] = useState(true);
-    const handleClose = () => {
-        setOpen(false);
-        props.setOpenChat(false);
-    }
+    
     //
 
     // Resetando as "novas mensagens" para fazer o ícone de nova mensagem sumir da tela no:
@@ -64,9 +59,22 @@ export default function ChatOpened(props) {
     <div className="flex flex-col flex-grow w-full h-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
         <div className="relative bg-gray-200 p-4 ">
             <div className="flex justify-between items-center ">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Chat
-                </h3>
+                <div className="relative bg-gray-200 p-4 ">
+                    <div className="flex justify-between items-center ">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Chat
+                        </h3>
+
+                        <button
+                            type="button"
+                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover-bg-gray-600 dark:hover-text-white"
+                            onClick={() => props.setOpenChat(false)}
+                        >
+                            <CloseOutlinedIcon/>
+                            <span className="sr-only">Fechar modal</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -102,7 +110,7 @@ export default function ChatOpened(props) {
                             <div className="flex items-center justify-center h-8 w-12 rounded-full bg-gray-200">
                                 <AccountCircleOutlinedIcon style={{color: "#474747"}}/>
                             </div>
-                        </div>  
+                        </div>
 
                     )}              
                 
