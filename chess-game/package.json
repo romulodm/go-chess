@@ -19,14 +19,8 @@
     "chessboardjsx": "^2.4.7",
     "moment": "^2.29.4",
     "react": "^18.2.0",
-    "react-chessboard": "^4.3.2",
     "react-dom": "^18.2.0",
-    "react-konva": "^18.2.10",
-    "react-router-dom": "^6.20.1",
-    "react-use-websocket": "^4.5.0",
-    "simple-peer": "^9.11.1",
-    "socket.io-client": "^4.7.2",
-    "uuid": "^9.0.1"
+    "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
