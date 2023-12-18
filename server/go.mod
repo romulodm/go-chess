@@ -1,4 +1,4 @@
-module chess
+module github.com/romulodm/go-chess-ws
 
 go 1.21.3
 

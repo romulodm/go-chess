@@ -1,39 +1,34 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
-	"github.com/gorilla/mux"
-
-	"chess/server"
+	"github.com/romulodm/go-chess-ws/server"
 )
 
-func serverConfig() http.Server {
-	r := mux.NewRouter()
+var addr = flag.String("addr", ":8080", "http service address")
 
-	r.HandleFunc("/create-room", func(w http.ResponseWriter, r *http.Request) {
+func main() {
+	flag.Parse()
+
+	http.HandleFunc("/create-room", func(w http.ResponseWriter, r *http.Request) {
 		server.CreateRoom(w, r)
 	})
-
-	r.HandleFunc("/join-room", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/join-room", func(w http.ResponseWriter, r *http.Request) {
 		server.JoinRoom(w, r)
 	})
 
-	return http.Server{
-		Addr:              "127.0.0.1:8000",
-		Handler:           r,
-		ReadTimeout:       15 * time.Second,
-		ReadHeaderTimeout: 15 * time.Second,
+	server := &http.Server{
+		Addr: *addr,
 	}
-}
 
-func main() {
-	server := serverConfig()
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 
 	fmt.Println("Server running!")
-
-	log.Fatal(server.ListenAndServe())
 }
