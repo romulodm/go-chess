@@ -14,13 +14,14 @@ This project was created for a university subject called "Programming Languages"
 
  - `React`
  - `Chess.js`
+ - `Chessboardjsx`
  - `Material UI`
  - `Tailwind CSS`
 
 **Back-end:**
  - `Go`
+ - `net/http`
  - `Gorilla WebSocket`
- - `Gorilla Mux`
 
 <br>
 
@@ -123,9 +124,48 @@ HTTP is a stateless communication protocol based on request and response transac
 In contrast, WebSocket establishes a persistent connection between the client and server, enabling continuous bidirectional communication. This full-duplex protocol allows both parties to send and receive data simultaneously, facilitating efficient real-time message transmission without the need to initiate new transactions for each interaction, as is the case with HTTP.
 </p>
 
-<br><br><br>
+<br>
 
-<div align="center">
-  <img src ="https://i.imgur.com/Ru6gEx0.png">
-</div>
+# :busts_in_silhouette: Contributors
+
+<table>
+  <tr>
+    <td>
+      <div>
+        <a href="https://github.com/romulodm">
+          <img src="https://avatars.githubusercontent.com/u/106553102?v=4" width="115">
+          <br>
+          <p align="center">Romulo</p>
+        </a>
+      </div>
+    </td>
+    <td>
+      <div>
+        <a href="https://github.com/Samueltdl">
+          <img src="https://avatars.githubusercontent.com/u/81890952?v=4" width="115">
+          <br>
+          <p align="center">Samuel</p>
+        </a>
+      </div>
+    </td>
+    <td>
+      <div>
+        <a href="https://github.com/vitorfreitasz">
+          <img src="https://avatars.githubusercontent.com/u/108691011?v=4" width="115">
+          <br>
+          <p align="center">Vitor</p>
+        </a>
+      </div>
+    </td>
+    <td>
+      <div>
+        <a href="https://github.com/gabpunk">
+          <img src="https://avatars.githubusercontent.com/u/108433377?v=4" width="115">
+          <br>
+          <p align="center">Gabriel</p>
+        </a>
+      </div>
+    </td>
+  </tr>
+</table>
 
