@@ -156,7 +156,7 @@ export default function Lobby(props) {
                                         className="game-code-lobby"
                                         maxLength="7"
                                         value={gameCode.toUpperCase()}
-                                        onChange={(e) => setGamecode(e.target.value)}
+                                        onChange={(e) => setGamecode(e.target.value.toUpperCase())}
                                     />
                                     </div>
                                     <button
