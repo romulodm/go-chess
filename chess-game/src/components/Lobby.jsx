@@ -117,79 +117,70 @@ export default function Lobby(props) {
 
         <div className="bg-white rounded-xl shadow-lg">
             <div className="p-4 sm:p-4">
-                <form>
-                    <div className="grid gap-y-4">
-                        
-                        <React.Fragment>
-                            <div className="flex flex-col items-center bg-white text-gray-700 py-6 text-center">
+                <div className="grid gap-y-4">
+                    <div className="flex flex-col items-center bg-white text-gray-700 py-6 text-center">
+                    
+                        <button  
+                            onClick={handleNewGame}
+                            className="inline-flex w-40 hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+                        >
+
+                            {(isLoadingNewGame == false) ? (
+                                <>
+                                <PlayCircleOutlineOutlinedIcon style={{marginRight: "5px"}}/>
+                                New game
+                                </>
+                            ) : (
+
+                                <>
+                                <CircularProgress size={20} style={{marginRight: "10px", fontSize: "2px"}} color="secondary" />
+                                New game
+                                </>
+                            )}
+
                             
-                                <button  
-                                    onClick={handleNewGame}
-                                    className="inline-flex w-40 hover:bg-blue-600 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
-                                >
+                        </button>
 
-                                    {(isLoadingNewGame == false) ? (
-                                        <>
-                                        <PlayCircleOutlineOutlinedIcon style={{marginRight: "5px"}}/>
-                                        New game
-                                        </>
-                                    ) : (
+                        <p className="text-gray-400 mt-10">-OR-</p>
 
-                                        <>
-                                        <CircularProgress size={20} style={{marginRight: "10px", fontSize: "2px"}} color="secondary" />
-                                        New game
-                                        </>
-                                    )}
-
-                                    
-                                </button>
-
-                                <p className="text-gray-400 mt-10">-OR-</p>
-
-                                <label className="text-gray-400 mt-2 mb-10">
-                                    Enter Game Code
-                                </label>
-                                
-                                <div className="flex flex-row w-60 align-center justify-center">
-                                    <div className="border border-1 rounded-lg border-gray-300 shadow-md bg-white  p-2 flex">
-                                    <input
-                                        className="game-code-lobby"
-                                        maxLength="7"
-                                        value={gameCode.toUpperCase()}
-                                        onChange={(e) => setGamecode(e.target.value.toUpperCase())}
-                                    />
-                                    </div>
-                                    <button
-                                        onClick={handleJoinGame}
-                                        className="inline-flex ml-3 hover:bg-blue-600 bg-blue-700 justify-center items-center py-3 px-4 text-base font-medium text-center text-white rounded-lg bg-blue-700 focus:ring-4"
-                                    >   
-
-                                        {(isLoadingJoinGame == false) ? (
-                                            <>
-                                            <LoginOutlinedIcon style={{marginRight: "7px"}}/>
-                                            Join
-                                            </>
-                                        ) : (
-
-                                            <>
-                                            <CircularProgress size={20} style={{marginRight: "10px", fontSize: "2px"}} color="secondary" />
-                                            Join
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-
-                                    
+                        <label className="text-gray-400 mt-2 mb-10">
+                            Enter Game Code
+                        </label>
+                        
+                        <div className="flex flex-row w-60 align-center justify-center">
+                            <div className="border border-1 rounded-lg border-gray-300 shadow-md bg-white  p-2 flex">
+                            <input
+                                className="game-code-lobby"
+                                maxLength="7"
+                                value={gameCode.toUpperCase()}
+                                onChange={(e) => setGamecode(e.target.value.toUpperCase())}
+                            />
                             </div>
-                        </React.Fragment>
+                            <button
+                                onClick={handleJoinGame}
+                                className="inline-flex ml-3 hover:bg-blue-600 bg-blue-700 justify-center items-center py-3 px-4 text-base font-medium text-center text-white rounded-lg bg-blue-700 focus:ring-4"
+                            >   
 
+                                {(isLoadingJoinGame == false) ? (
+                                    <>
+                                    <LoginOutlinedIcon style={{marginRight: "7px"}}/>
+                                    Join
+                                    </>
+                                ) : (
+
+                                    <>
+                                    <CircularProgress size={20} style={{marginRight: "10px", fontSize: "2px"}} color="secondary" />
+                                    Join
+                                    </>
+                                )}
+                            </button>
+                        </div>
+
+                            
                     </div>
-                </form>
+                </div>
             </div>
-
-
         </div>
-
     </Box>
   )
 }
