@@ -12,6 +12,7 @@ import Waiting from '../components/Waiting';
 
 import BoardOneVsOne from '../components/BoardOneVsOne.';
 import ChatOpened from '../components/ChatOpened';
+import EndGameMessage from '../components/EndGameMessage';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -36,29 +37,16 @@ export default function Game() {
     };
     //
 
-    const [windowWidth, setWindowWidth] = useState();
+    // Checando o redimensionamento da tela:
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    function verificarTamanhoDaTela() {
-        return setWindowWidth(window.innerWidth)
-        //console.log(larguraDaTela)
-
-        // Define a largura mínima para exibir a div (por exemplo, 600 pixels)
-        var larguraMinima = 900;
-
-        // Se a largura da tela for maior ou igual à largura mínima, exibe a div, caso contrário, oculta-a
-        if (larguraDaTela >= larguraMinima) {
-            document.getElementById("chatDiv").style.display = "flex";
-            document.getElementById("chatMobDiv").style.display = "none";
-        } else {
-            document.getElementById("chatDiv").style.display = "none";
-            document.getElementById("chatMobDiv").style.display = "flex";
-        }
+    function checkScreenSize() {
+        return setWindowWidth(window.innerWidth);  
     }
 
-    
-    // Chama a função quando a página é carregada e sempre que a janela é redimensionada
-    window.addEventListener("load", verificarTamanhoDaTela);
-    window.addEventListener("resize", verificarTamanhoDaTela);
+    window.addEventListener("load", checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+    //
 
     // Conexão com o WebSocket:
     const [webSocket, setWebSocket] = useState(false);
@@ -76,11 +64,17 @@ export default function Game() {
     const [userName, setUserName] = useState("");
     //
 
-    // Conexão com o WebSocket:
+    // O chat que é mostrado para o envio de mesangens:
     const [openChat, setOpenChat] = useState(false);
     const [openChatOpened, setOpenChatOpened] = useState(true);
     const [usersMessages, setUsersMessages] = useState([]);
     const [newMessagesReceived, setNewMessagesReceived] = useState(0);
+    //
+
+    // Exibir ou não a mensagem de encerramento de uma partida:
+    const [openEndGameMessage, setOpenEndGameMessage] = useState(false);
+    const [typeEndGameMessage, setTypeEndGameMessage] = useState("");
+    const [textEndGameMessage, setTextEndGameMessage] = useState("");
     //
 
     const handleWebSocketMessage = (event) => {
@@ -88,6 +82,31 @@ export default function Game() {
     
         if (messageFromServer.action === "START_GAME") {
           setStartGame(true);
+        }
+
+        if (messageFromServer.action === "USER_LEFT_ROOM") {
+            handleAlertMessage("error", "A player left the room!")
+            if (userName === "Player 2") {
+                setUserName("Player 1");
+            };
+            setUsersMessages([]);
+            setStartGame(false);
+        }
+
+        if (messageFromServer.action === "GAME_CHECKMATE") {
+            if ((messageFromServer.message == "White pieces win by checkmate!" && userName == "Player 1") || (messageFromServer.message == "Black pieces win by checkmate!" && userName == "Player 2")) {
+                setTypeEndGameMessage("WIN");
+            } else {
+                setTypeEndGameMessage("LOSE");
+            }
+
+            setTextEndGameMessage(messageFromServer.message)
+            setOpenEndGameMessage(true)
+        }
+
+        if (messageFromServer.action === "GAME_DRAW") {
+            setTextEndGameMessage(messageFromServer.message)
+            setOpenEndGameMessage(true)
         }
     
         if (messageFromServer.action === "CHAT_MESSAGE") {
@@ -130,7 +149,7 @@ export default function Game() {
     }, [webSocket, openChat, usersMessages, newMessagesReceived]);
 
     return (
-    <div className="flex h-screen justify-center items-center">
+    <div className="flex h-screen bg-gray-100 w-full justify-center items-center">
 
         {webSocket === false ? (
             <Lobby 
@@ -158,23 +177,40 @@ export default function Game() {
                     />
                     
                     <div className="flex items-center">
-                        {windowWidth >= 900 && openChatOpened === true ? (
-                            <div id='chatDiv' className='flex justify-center items-right w-full h-full mx-4 rounded-md' >
-                                <ChatOpened
-                                webSocket={webSocket}
-                                setOpenChatOpened={setOpenChat}
-                                openChat={openChat}
-                                usersMessages={usersMessages}
-                                setUsersMessages={setUsersMessages}
-                                userName={userName}
-                                setNewMessagesReceived={setNewMessagesReceived}
-                                />
-                            </div>
-                        ) : (
-                            <div id='chatMobDiv' className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
+                    {windowWidth >= 1290 ? (
+                        openChatOpened === true && openChat === false ? (
 
+                                <div className='flex justify-center items-right h-full ml-4 rounded-md' style={{ width: '380px' }}>
+                                    <ChatOpened
+                                        webSocket={webSocket}
+                                        setOpenChatOpened={setOpenChatOpened}
+                                        openChat={openChat}
+                                        usersMessages={usersMessages}
+                                        setUsersMessages={setUsersMessages}
+                                        userName={userName}
+                                        setNewMessagesReceived={setNewMessagesReceived}
+                                    />
+                                </div>
+
+                            ) : (
+
+                                <div className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
+                                    <button
+                                        className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300"
+                                        onClick={() => setOpenChatOpened(true)}
+                                    >
+                                        <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="error">
+                                            <ChatOutlinedIcon />
+                                        </Badge>
+                                    </button>
+                                </div>
+
+                            )
+                        ) : (
+
+                            <div className="flex justify-center items-center w-full h-20 my-2 md:h-full md:w-20 md:mx-2 bg-blue-700 rounded-md">
                                 <button
-                                    className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300 "
+                                    className="p-4 rounded-lg bg-gray-100 text-gray-600 hover:from-blue-300 hover:to-purple-300 hover:bg-gray-300"
                                     onClick={() => setOpenChat(true)}
                                 >
                                     <Badge badgeContent={newMessagesReceived} overlap="circular" variant="dot" color="error">
@@ -182,6 +218,7 @@ export default function Game() {
                                     </Badge>
                                 </button>
                             </div>
+
                         )}
                         {openChat === true && 
                             <Chat
@@ -195,6 +232,9 @@ export default function Game() {
                             />
                         }
                     </div>
+
+                    {openEndGameMessage && <EndGameMessage type={typeEndGameMessage} text={textEndGameMessage} setOpenEndGameMessage={setOpenEndGameMessage}/>}
+
                 </div>
                 
             )
