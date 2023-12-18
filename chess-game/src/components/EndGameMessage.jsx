@@ -74,7 +74,7 @@ export default function EndGameMessage(props) {
                     )}
 
                     <div className="text-left justify-center">
-                        <p className="text-sm ml-3 text-gray-500 text-justify">
+                        <p className="text-sm ml-3 text-gray-500 text-center">
                         {props.text}
                         </p>
                     </div>

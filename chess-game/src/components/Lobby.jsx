@@ -19,7 +19,8 @@ const style = {
   width: 350,
 };
 
-var SOCKET_BASE_URL = "ws://localhost:8000"
+//var SOCKET_BASE_URL = "ws://localhost:8080"
+var SOCKET_BASE_URL = "ws://ws-server-teste.onrender.com";
 
 export default function Lobby(props) {
     // Exibir loading (o círculo que fica rodando):
@@ -59,6 +60,7 @@ export default function Lobby(props) {
 
         socket.onerror = function (error) {
             setIsLoadingNewGame(false);
+            console.log(error)
             props.handleAlertMessage("error", "An error occurred while creating the room.")
         };
 
@@ -74,6 +76,7 @@ export default function Lobby(props) {
         const regexGameCode = /^[A-Z0-9]+$/;
 
         if (gameCode.length < 7 || !regexGameCode.test(gameCode)) {
+            setIsLoadingJoinGame(false);
             props.handleAlertMessage("error", "Enter a valid code, please.");
             return
         }
@@ -113,8 +116,6 @@ export default function Lobby(props) {
     <Box sx={style}>
 
         <div className="bg-white rounded-xl shadow-lg">
-        
-
             <div className="p-4 sm:p-4">
                 <form>
                     <div className="grid gap-y-4">
