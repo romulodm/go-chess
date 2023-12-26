@@ -90,6 +90,7 @@ export default function Game() {
                 setUserName("Player 1");
             };
             setUsersMessages([]);
+            setOpenEndGameMessage(false);
             setStartGame(false);
         }
 
@@ -233,7 +234,16 @@ export default function Game() {
                         }
                     </div>
 
-                    {openEndGameMessage && <EndGameMessage type={typeEndGameMessage} text={textEndGameMessage} setOpenEndGameMessage={setOpenEndGameMessage}/>}
+                    {openEndGameMessage && <EndGameMessage 
+                                                type={typeEndGameMessage} 
+                                                text={textEndGameMessage} 
+                                                setOpenEndGameMessage={setOpenEndGameMessage}
+                                                webSocket={webSocket}
+                                                handleAlertMessage={handleAlertMessage}
+                                                userName={userName}
+                                                setUserName={setUserName}
+                                                setStartGame={setStartGame}
+                                            />}
 
                 </div>
                 

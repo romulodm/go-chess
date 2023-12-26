@@ -6,7 +6,6 @@ import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
 
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { NavLink } from "react-router-dom";
 
 const style = {
   position: 'absolute',
@@ -25,6 +24,10 @@ export default function EndGameMessage(props) {
     props.setOpenEndGameMessage(false);
   }
   //
+
+  const hanldeExitToHomePage = () => {
+    window.location.reload()
+  }
 
   return (
     <Modal
@@ -91,13 +94,14 @@ export default function EndGameMessage(props) {
                     Return to new match
                 </button>
 
-                <NavLink to="/">
-                    <div
+                
+                    <button
+                    onClick={hanldeExitToHomePage}
                         className="inline-flex w-full text-center justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600"
                     >
                         Exit to home page
-                    </div>
-                </NavLink>
+                    </button>
+                
             </div>
         </div>
       
