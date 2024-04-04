@@ -104,7 +104,10 @@ func serverConfig() http.Server {
 <p align="center">Figure 2: Lobby component</p>
 </details>
 
+<img src ="https://i.imgur.com/d2Tt2Bz.png">
+<p align="center">Figure 3: Game page</p>
 <br>
+
 
 # :electric_plug: WebSocket
 <p align="justify">
@@ -114,7 +117,7 @@ HTTP is a stateless communication protocol based on request and response transac
 
 <div align="center">
 <img src ="https://assets-global.website-files.com/5ff66329429d880392f6cba2/617a90ab08641e631353de50_Websocket%20vs%20HTTP.png">
-<p>Figure 3: Differences between HTTP and WebSocket</p>
+<p>Figure 4: Differences between HTTP and WebSocket</p>
 </div>
 <br>
 
