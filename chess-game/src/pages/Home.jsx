@@ -10,11 +10,11 @@ export default function Home() {
             
             <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
                 <a href="https://github.com/romulodm/go-chess-ws" target='_blank' className="inline-flex ustify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200" role="alert">
-                    <span className="text-xs bg-blue-700 rounded-full text-white px-4 py-1.5 mr-3">
+                    <span className="text-xs bg-blue-700 rounded-full text-white sm:px-4 px-2.5 py-1.5 mr-3">
                         Repository
                     </span>
 
-                    <span className="text-sm font-medium">
+                    <span className="sm:text-sm text-xs font-medium">
                     Support the project! Leave a star
                     </span>
 
