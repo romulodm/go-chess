@@ -20,7 +20,7 @@ const style = {
 };
 
 //var SOCKET_BASE_URL = "ws://localhost:8080"
-var SOCKET_BASE_URL = "wss://ws-server-teste.onrender.com";
+var SOCKET_BASE_URL = import.meta.env.VITE_BASE_URL_SERVER;
 
 export default function Lobby(props) {
     // Exibir loading (o círculo que fica rodando):
