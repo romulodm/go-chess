@@ -103,6 +103,11 @@ func (room *Room) unregisterClientInRoom(client *Client) {
 	*/
 	if _, ok := room.clients[client]; ok {
 		delete(room.clients, client)
+
+		// If there are no more players, we remove the room
+		if len(room.clients) == 0 {
+			delete(rooms, room.ID)
+		}
 	}
 }
 
